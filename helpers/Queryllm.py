@@ -8,14 +8,15 @@ from sqlalchemy import MetaData,create_engine
 from llama_index.core.retrievers import NLSQLRetriever
 from llama_index.core import Settings
 from llama_index.embeddings.gemini import GeminiEmbedding
+import os
 
 def QueryLLM(query, db_url):
     engine = create_engine(db_url)
-    Settings.llm = Gemini(model_name='models/gemini-pro', api_key='AIzaSyDHLca8_D4lBazOgveuzP31cssj5ETaSaM')
+    Settings.llm = Gemini(model_name='models/gemini-pro', api_key=os.getenv('GOOGLE_API_KEY'))
     model_name = "models/embedding-001"
 
     Settings.embed_model = GeminiEmbedding(
-        model_name=model_name, api_key='AIzaSyDHLca8_D4lBazOgveuzP31cssj5ETaSaM', title="this is a document"
+        model_name=model_name, api_key=os.getenv('GOOGLE_API_KEY'), title="this is a document"
     )
     sql_database = SQLDatabase(engine)
     

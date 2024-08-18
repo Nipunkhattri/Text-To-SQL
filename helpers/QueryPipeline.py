@@ -12,6 +12,7 @@ from llama_index.core.query_pipeline import QueryPipeline, InputComponent, FnCom
 from datetime import datetime
 import re
 from llama_index.core.prompts import PromptTemplate
+import os
 
 def get_db_schema(db_url):
     engine = create_engine(db_url)
@@ -27,7 +28,7 @@ def get_db_schema(db_url):
 
 def extract_sql_query(prompt):
     # Use the LLM to generate the SQL query based on the prompt
-    llm = Gemini(model_name='models/gemini-pro', api_key='AIzaSyDHLca8_D4lBazOgveuzP31cssj5ETaSaM')
+    llm = Gemini(model_name='models/gemini-pro', api_key=os.getenv('GOOGLE_API_KEY'))
     response = llm.complete(prompt)
     sql_query = response.text.strip()
     sql_query = re.sub(r'```sql|```', '', sql_query).strip()
@@ -71,7 +72,7 @@ def run_sql_query(db_url, sql_query) -> str:
     return query_result
 
 def QueryLLM(query, db_url):
-    llm = Gemini(model_name='models/gemini-pro', api_key='AIzaSyDHLca8_D4lBazOgveuzP31cssj5ETaSaM')
+    llm = Gemini(model_name='models/gemini-pro', api_key=os.getenv('GOOGLE_API_KEY'))
     input_component = InputComponent()
 
     # Use to get the schema
